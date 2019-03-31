@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>TC KONTROL</title>
+	<!--------BOOTSRAP CSSS--->
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+</head>
+<body>
+<div class="container-fluid mt-3">
+	 <form>
+	 	<div class="form-group">
+	 		<label for="tc">TC NO</label>
+	 		<div class="row">
+	 			<div class="col-3">
+	 				<input type="text" id="tc"  name="tc" class="form-control">
+	 			</div>
+	 			<button type="button" id="Btn" class="btn btn-dark">Control</button>
+	 		</div>
+	 	</div>
+	 	<p id="resultFalse" class="alert alert-danger" style="display: none"></p>
+	 	<p id="resultTrue" class="alert alert-success" style="display: none"></p>
+	 </form>
+</div>
+<script>
+/*TC KİMLİK NO KURALLARI
+1)11 Haneli rakamlardan olluşmalıdır,
+2)İlk rakam sıfır olamaz,
+3)1-3-5-7-9. hanelerinin toplamının 7 katı ile  2-4-6-8. hanelerin toplamı çıkartılır sonucun 10 a bölümünden kalan 10. haneyi verir,
+4)İlk 10 hanenin toplamının 10 a bölümünden kalan 11. haneyi verir.
+*/
+  var i,j,z,txt,resultTrue,resultFalse,btn,odd=0,even=0,result=0,resultFour=0;
+  //Öncelikle değerlerimizi çekiyoruz.
+  txt=document.querySelector("#tc");
+  resultTrue=document.querySelector("#resultTrue");
+  resultFalse=document.querySelector("#resultFalse");
+  btn=document.querySelector("#Btn");
+
+  //Kontrolleri yapıyoruz
+  //ilk önce butona tıklanmadan 3. kontolü yapacağız.Peki nasıl yapacağız?
+  /* 
+  index no 0' dan başladığı için 0.index 1.haneye  denk geliyor.
+  Çift sayılı index noların toplamınını even değişkenine
+  Tek  sayılı index noların toplamınını odd değişkenine atacağız.
+  */
+
+
+     btn.addEventListener("click",function(){
+		
+      /* for(i=0;i<9;i+=2)
+       {
+         odd+=Number(txt.value[i]);
+       };
+       for(z=1;z<8;z+=2)
+       {
+         even+=Number(txt.value[z]);
+       }; */
+      
+		 for(i=0;i<10;i++)
+		 {
+		   //çift sayılı index(Tek sayılı haneler) toplmı 
+            if(i%2==0)
+            {
+            	even+=Number(txt.value[i]);
+            }
+            //7. indexe kadar gitsin
+            if((i%2!=0)&&(i<8))
+            {
+                odd+=Number(txt.value[i]);
+            }   
+		 };
+        even*=7;
+       result=Math.abs(even-odd);  
+        //4. koşolu kontrol ediyoruz
+        for(j=0;j<10;j++)
+        {
+           resultFour+=Number(txt.value[j]);
+        };
+        
+           resultFalse.style.display="block";
+           resultTrue.style.display="none";
+
+           if(txt.value=="")
+           {
+            resultFalse.innerText="Bu alan boş bırakılamaz .";
+           }
+           else if(txt.value.length!==11)
+           {
+            resultFalse.innerText="TC no 11 haneli olmalıdır.";
+           } 
+           else if(isNaN(txt.value))
+           {
+           	resultFalse.innerText="TC no rakamlardan oluşmalıdır.";
+           }
+           else if(txt.value[0]==0)
+           {
+           	resultFalse.innerText="TC no 0 rakamıyla başlayamaz.";
+           }
+           else if(result%10 !=Number(txt.value[9]))
+           {
+           		resultFalse.innerText="Geçerli bir TC nosu giriniz.";
+           }
+           else if (resultFour%10 !=Number(txt.value[10]))
+           {
+           	     resultFalse.innerText="...Geçersiz.....";
+           }
+           else
+           {   
+           	   resultFalse.style.display="none";
+           	   resultTrue.style.display="block";
+               resultTrue.innerText="İşlem başarılı";
+           }
+  
+     });
+</script>
+
+</body>
+</html>
